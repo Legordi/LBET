@@ -184,7 +184,23 @@ main {
   width: 90%;
 }
 
-.carousel-image {
+.imagen-rifa {
+  max-width: 60%;
+  width: 60%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.imagen-ruletax {
+  max-width: 60%;
+  width: 60%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.imagen-bono {
   max-width: 60%;
   width: 60%;
   height: 100%;

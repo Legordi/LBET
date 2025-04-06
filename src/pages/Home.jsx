@@ -3,6 +3,9 @@ import "../styles/Home.css";
 import "../styles/Modal.css";
 import "../styles/Menu.css";
 import logo from "/src/assets/images/lbet-logo.png";
+import ImagenRifa from '../assets/images/imagenrifa.png';
+import ImagenRuletax from '../assets/images/roulette.png';
+import ImagenBono from '../assets/images/imagenbono.png';
 import iconoJuegos from "/src/assets/images/iconojuegos.png";
 import rocketImg from "/src/assets/images/rocket.png";
 import rouletteImg from "/src/assets/images/roulette.png";
@@ -112,7 +115,7 @@ function Home() {
       <p>Participa en nuestras rifas semanales, compra uno o más tickets y espera el resultado.</p>
       <button className="carousel-btn">Detalles</button>
       </div>
-      <img src="/src/assets/images/imagenrifa.png" alt="Rifa Semanal" className="carousel-image" />
+      <img src={ImagenRifa} alt="Imagen Rifa" className="imagen-rifa" />
       
     </div>
     <div className="carousel-card">
@@ -122,7 +125,7 @@ function Home() {
       <p>¡Bienvenido a Roulette X! Haz tu apuesta, gira la ruleta y recibe premios únicos.</p>
       <button className="carousel-btn">Jugar</button>
       </div>
-      <img src="/src/assets/images/roulette.png" alt="Roulette X" className="carousel-image" />
+      <img src={ImagenRuletax} alt="Imagen Ruleta X" className="imagen-ruletax" />
       
     </div>
     <div className="carousel-card">
@@ -132,7 +135,7 @@ function Home() {
       <p>¡Haz tu primer depósito en LBET Casino y recibe un 20% extra en el saldo de tu cuenta!</p>
       <button className="carousel-btn">Detalles</button>
       </div>
-      <img src="/src/assets/images/imagenbono.png" alt="Bono inicial" className="carousel-image" />
+      <img src={ImagenBono} alt="Imagen Bono" className="imagen-bono" />
       
     </div>
   </div>
