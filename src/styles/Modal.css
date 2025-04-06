@@ -1,0 +1,108 @@
+/* Fondo desenfocado */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7); /* Oscurece el fondo */
+    backdrop-filter: blur(3px); /* Aplica el desenfoque */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  /* Contenedor del modal */
+  .modal-content {
+    background: #111111;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+    width: 100%;
+    max-width: 500px;
+    text-align: center;
+    position: relative;
+  }
+
+  .modal-content form {
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* Espacio entre los inputs */
+    width: 100%;
+  }
+  
+  .modal-content input {
+    width: 100%; /* Que ocupen todo el ancho del formulario */
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #444; /* Borde sutil */
+    background-color: #222; /* Fondo oscuro */
+    color: #fff; /* Texto blanco */
+  }
+
+  /* Botón de cerrar */
+  .close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    color: white;
+  }
+
+  .modal-btn {
+    width: 100%; 
+    padding: 12px;
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+    margin-bottom: 20px;
+    background-color: #00ff47;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.1s ease-in-out;
+  }
+  
+  .modal-btn:hover {
+    background: #5dff8b;
+  }
+  
+  .modal-btn:active {
+    transform: scale(0.95);
+  }
+  
+  .modal-text {
+    font-size: 14px;
+    color: #ccc;
+    text-align: center;
+    margin-top: 10px;
+  }
+  
+  .interactive-text {
+    color: #ffffff;
+    cursor: pointer;
+    transition: color 0.3s ease;
+  }
+  
+  .interactive-text:hover {
+    text-decoration: underline;
+  }
+  
+  body.modal-open {
+    overflow: hidden;
+  }
+
+  .error-message {
+    color: #ff4d4d;
+    background: rgba(255, 77, 77, 0.1);
+    padding: 8px;
+    border-radius: 5px;
+    margin: 10px 0;
+    font-size: 14px;
+  }
