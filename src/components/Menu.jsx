@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import "../styles/Menu.css";
 import { FiClock, FiUser, FiInfo, FiLogOut } from "react-icons/fi";
+import { MdAdminPanelSettings } from "react-icons/md";
+import { RiMoneyDollarCircleLine } from "react-icons/ri";
 import { getAuth, signOut } from "firebase/auth";
 
 const Menu = ({ user, onClose, onLogout }) => {
@@ -10,20 +12,20 @@ const Menu = ({ user, onClose, onLogout }) => {
     setClosing(true);
     setTimeout(() => {
       onClose();
-    }, 500); // duración de la animación
+    }, 500);
   };
 
   const handleLogout = () => {
     const auth = getAuth();
-    setClosing(true); // inicia la animación de cierre
+    setClosing(true);
     setTimeout(() => {
-      onClose(); // cierra el menú después de la animación
+      onClose();
     }, 500);
 
     signOut(auth)
       .then(() => {
         console.log("Sesión cerrada");
-        onLogout(); // Para limpiar estado o redirigir
+        onLogout();
       })
       .catch((error) => {
         console.error("Error al cerrar sesión:", error);
@@ -62,6 +64,26 @@ const Menu = ({ user, onClose, onLogout }) => {
             Afiliación
           </li>
         </ul>
+
+        {user?.rol === "admin" && (
+          <>
+            <span className="menu-section-title">Administración</span>
+            <ul className="menu-list">
+              <li className="menu-item">
+                <MdAdminPanelSettings className="menu-icon" />
+                Admin Panel
+              </li>
+              <li className="menu-item">
+                <RiMoneyDollarCircleLine className="menu-icon" />
+                Solicitudes de depósito
+              </li>
+              <li className="menu-item">
+                <RiMoneyDollarCircleLine className="menu-icon" />
+                Solicitudes de retiro
+              </li>
+            </ul>
+          </>
+        )}
 
         <button className="logout-btn" onClick={handleLogout}>
           <FiLogOut className="menu-icon" />

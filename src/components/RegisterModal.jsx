@@ -41,10 +41,12 @@ function RegisterModal({ onClose, onSwitch }) {
       // Crear usuario con Firebase Auth
       const user = await registerUser(email, password);
 
-      // Guardar en Firestore
+      // Guardar en Firestore con campos adicionales
       await setDoc(doc(db, "users", user.uid), {
         username: username,
-        email: email
+        email: email,
+        balance: 0,
+        rol: "user"
       });
 
       onClose(); // Cerrar modal tras registro exitoso

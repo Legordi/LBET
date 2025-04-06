@@ -19,6 +19,8 @@ import { auth, db } from "../firebase/firebaseConfig";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 import '@fortawesome/fontawesome-free/css/all.min.css';
+import { FaCrown } from "react-icons/fa";
+
 
 function Home() {
   const [showLogin, setShowLogin] = useState(false);
@@ -34,7 +36,8 @@ function Home() {
         if (userDoc.exists()) {
           setUser({ 
             username: userDoc.data().username, 
-            balance: userDoc.data().balance || 0 
+            balance: userDoc.data().balance || 0,
+            rol: userDoc.data().rol,
           });
         }
       } else {
@@ -83,7 +86,12 @@ function Home() {
           {user ? (
             <div className="user-info">
               <div className="user-details">
-                <span className="username">{user.username}</span>
+              <span className="username">
+                {user?.username}
+                {user?.rol === "admin" && (
+                <FaCrown style={{ color: "#00ff47", marginLeft: "7px" }} />
+                )}
+              </span>
                 <span className="balance">${user.balance.toLocaleString()}</span>
               </div>
               <button className="menu-btn" onClick={() => {
