@@ -21,11 +21,6 @@ const DepositModal = ({ onClose }) => {
 
   const handleApprove = async (details, paidAmount) => {
     try {
-      if (!currentUser || !currentUser.uid || !currentUser.email) {
-        setErrorMessage(" Debes iniciar sesión para hacer un depósito.");
-        return;
-      }
-
       const userRef = doc(db, "users", currentUser.uid);
       const userSnap = await getDoc(userRef);
 
@@ -53,10 +48,7 @@ const DepositModal = ({ onClose }) => {
 
       setMessage(" Depósito exitoso. Saldo actualizado.");
       setErrorMessage("");
-
-      setTimeout(() => {
-        onClose();
-      }, 2000);
+      setTimeout(() => onClose(), 2000);
     } catch (error) {
       console.error(" Error al procesar depósito:", error);
       setErrorMessage(" Ocurrió un error al registrar el depósito.");
@@ -65,11 +57,18 @@ const DepositModal = ({ onClose }) => {
 
   const handleAmountSubmit = (e) => {
     e.preventDefault();
+
+    if (!currentUser) {
+      setErrorMessage(" Debes iniciar sesión para hacer un depósito.");
+      return;
+    }
+
     const numericAmount = parseFloat(amount);
     if (!numericAmount || numericAmount < 1) {
       setErrorMessage(" El monto mínimo es de $1.00 USD.");
       return;
     }
+
     setShowPayPal(true);
     setMessage("");
     setErrorMessage("");
@@ -109,7 +108,7 @@ const DepositModal = ({ onClose }) => {
               return actions.order.create({
                 purchase_units: [{
                   amount: {
-                    value: parseFloat(amount).toFixed(2),
+                    value: parseFloat(amount).toFixed(2), // Asegura dos decimales
                   },
                 }],
               });
