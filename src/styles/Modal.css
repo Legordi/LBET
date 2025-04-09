@@ -23,6 +23,12 @@
     max-width: 500px;
     text-align: center;
     position: relative;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  .modal-content label{
+    text-align: left;
   }
 
   .modal-content form {
@@ -106,3 +112,51 @@
     margin: 10px 0;
     font-size: 14px;
   }
+
+  button[type="submit"] {
+    background-color: #00ff47;
+    color: white;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  button[type="submit"]:disabled {
+    background-color: #aaa;
+    cursor: not-allowed;
+  }
+
+  input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  .modal-message {
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 6px;
+    font-weight: 500;
+    text-align: center;
+  }
+  
+  .modal-message.success {
+    color: #00ff47;
+    background: #48ff7c4e;
+    padding: 8px;
+    border-radius: 5px;
+    margin: 10px 0;
+    font-size: 14px;
+  }
+  
+  .modal-message.error {
+    color: #ff4d4d;
+    background: rgba(255, 77, 77, 0.1);
+    padding: 8px;
+    border-radius: 5px;
+    margin: 10px 0;
+    font-size: 14px;
+  }
+  

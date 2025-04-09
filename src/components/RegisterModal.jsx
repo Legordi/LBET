@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { db, registerUser } from "../firebase/auth"; // Importamos la función registerUser
 import { collection, query, where, getDocs, doc, setDoc } from "firebase/firestore";
+import "../styles/Modal.css"; // Asegúrate de tener estilos para el modal
 
 function RegisterModal({ onClose, onSwitch }) {
   const [username, setUsername] = useState("");

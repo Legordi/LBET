@@ -35,6 +35,8 @@ function Home() {
         const userDoc = await getDoc(doc(db, "users", user.uid));
         if (userDoc.exists()) {
           setUser({ 
+            uid: user.uid,
+            email: user.email,
             username: userDoc.data().username, 
             balance: userDoc.data().balance || 0,
             rol: userDoc.data().rol,
@@ -44,10 +46,10 @@ function Home() {
         setUser(null);
       }
     });
-
+  
     return () => unsubscribe();
   }, []);
-
+  
   const handleLogout = async () => {
     await signOut(auth);
     setUser(null);
@@ -89,7 +91,7 @@ function Home() {
               <span className="username">
                 {user?.username}
                 {user?.rol === "admin" && (
-                <FaCrown style={{ color: "#00ff47", marginLeft: "7px" }} />
+                <FaCrown style={{ color: "gold", marginLeft: "7px" }} />
                 )}
               </span>
                 <span className="balance">${user.balance.toLocaleString()}</span>

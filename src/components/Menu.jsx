@@ -2,11 +2,13 @@ import React, { useState } from "react";
 import "../styles/Menu.css";
 import { FiClock, FiUser, FiInfo, FiLogOut } from "react-icons/fi";
 import { MdAdminPanelSettings } from "react-icons/md";
-import { RiMoneyDollarCircleLine } from "react-icons/ri";
 import { getAuth, signOut } from "firebase/auth";
+import DepositModal from "./DepositModal";
+import { Link } from 'react-router-dom';
 
 const Menu = ({ user, onClose, onLogout }) => {
   const [closing, setClosing] = useState(false);
+  const [showDepositModal, setShowDepositModal] = useState(false);
 
   const handleClose = () => {
     setClosing(true);
@@ -33,64 +35,67 @@ const Menu = ({ user, onClose, onLogout }) => {
   };
 
   return (
-    <div className="menu-overlay" onClick={handleClose}>
-      <div
-        className={`menu-modal ${closing ? "closing" : ""}`}
-        onClick={(e) => e.stopPropagation()}
-      >
-        <button className="close-btn" onClick={handleClose}>✕</button>
-        <div className="menu-user-box">
-          <span className="menu-username">{user?.username || "Usuario"}</span>
-          <span className="menu-balance">${user?.balance?.toLocaleString() || "0"}</span>
-        </div>
-        <div className="menu-buttons">
-          <button className="menu-action-btn">Depositar</button>
-          <button className="menu-action-btn">Retirar</button>
-        </div>
+    <>
+      <div className="menu-overlay" onClick={handleClose}>
+        <div
+          className={`menu-modal ${closing ? "closing" : ""}`}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <button className="close-btn" onClick={handleClose}>✕</button>
+          <div className="menu-user-box">
+            <span className="menu-username">{user?.username || "Usuario"}</span>
+            <span className="menu-balance">${user?.balance?.toLocaleString() || "0"}</span>
+          </div>
+          <div className="menu-buttons">
+            <button className="menu-action-btn" onClick={() => setShowDepositModal(true)}>
+              Recargar
+            </button>
+            <button className="menu-action-btn">Retirar</button>
+          </div>
 
-        <span className="menu-section-title">Cuenta</span>
+          <span className="menu-section-title">Cuenta</span>
 
-        <ul className="menu-list">
-          <li className="menu-item">
-            <FiClock className="menu-icon" />
-            Historial
-          </li>
-          <li className="menu-item">
-            <FiInfo className="menu-icon" />
-            Juego responsable
-          </li>
-          <li className="menu-item">
-            <FiUser className="menu-icon" />
-            Afiliación
-          </li>
-        </ul>
-
-        {user?.rol === "admin" && (
+          <ul className="menu-list">
+            <li className="menu-item">
+              <FiClock className="menu-icon" />
+              Historial de transacciones
+            </li>
+            <li className="menu-item">
+              <FiInfo className="menu-icon" />
+              Juego responsable
+            </li>
+            <li className="menu-item">
+              <FiUser className="menu-icon" />
+              Afiliación
+            </li>
+          </ul>
+          {user?.rol === "admin" && (
           <>
             <span className="menu-section-title">Administración</span>
-            <ul className="menu-list">
+             <ul className="menu-list">
               <li className="menu-item">
-                <MdAdminPanelSettings className="menu-icon" />
-                Admin Panel
+              <MdAdminPanelSettings className="menu-icon" />
+              <Link to="/admin" className="menu-link">
+              Admin Panel
+              </Link>
               </li>
-              <li className="menu-item">
-                <RiMoneyDollarCircleLine className="menu-icon" />
-                Solicitudes de depósito
-              </li>
-              <li className="menu-item">
-                <RiMoneyDollarCircleLine className="menu-icon" />
-                Solicitudes de retiro
-              </li>
-            </ul>
+             </ul>
           </>
         )}
-
-        <button className="logout-btn" onClick={handleLogout}>
-          <FiLogOut className="menu-icon" />
-          Cerrar sesión
-        </button>
+          <button className="logout-btn" onClick={handleLogout}>
+            <FiLogOut className="menu-icon" />
+            Cerrar sesión
+          </button>
+        </div>
       </div>
-    </div>
+
+      {/* MODAL DE DEPÓSITO */}
+      {showDepositModal && (
+        <DepositModal
+          onClose={() => setShowDepositModal(false)}
+        />
+      )}
+    </>
   );
 };
 
