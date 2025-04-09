@@ -57,7 +57,6 @@ const DepositModal = ({ onClose }) => {
       setTimeout(() => {
         onClose();
       }, 2000);
-
     } catch (error) {
       console.error(" Error al procesar depósito:", error);
       setErrorMessage(" Ocurrió un error al registrar el depósito.");
@@ -67,7 +66,7 @@ const DepositModal = ({ onClose }) => {
   const handleAmountSubmit = (e) => {
     e.preventDefault();
     const numericAmount = parseFloat(amount);
-    if (isNaN(numericAmount) || numericAmount < 1) {
+    if (!numericAmount || numericAmount < 1) {
       setErrorMessage(" El monto mínimo es de $1.00 USD.");
       return;
     }
