@@ -1,162 +1,375 @@
-/* Fondo desenfocado */
+/* Fondo desenfocado */ 
 .modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.7); /* Oscurece el fondo */
-    backdrop-filter: blur(3px); /* Aplica el desenfoque */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-  }
-  
-  /* Contenedor del modal */
-  .modal-content {
-    background: #111111;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
-    width: 100%;
-    max-width: 500px;
-    text-align: center;
-    position: relative;
-    max-height: 90vh;
-    overflow-y: auto;
-  }
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(3px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
 
-  .modal-content label{
-    text-align: left;
-  }
+/* Contenedor del modal */
+.modal-content {
+  background: #111111;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+  width: 100%;
+  max-width: 500px;
+  text-align: center;
+  position: relative;
+  max-height: 90vh;
+  overflow-y: auto;
+}
 
-  .modal-content form {
-    margin-top: 30px;
-    display: flex;
-    flex-direction: column;
-    gap: 15px; /* Espacio entre los inputs */
-    width: 100%;
-  }
-  
-  .modal-content input {
-    width: 100%; /* Que ocupen todo el ancho del formulario */
-    padding: 10px;
-    font-size: 16px;
-    border-radius: 5px;
-    border: 1px solid #444; /* Borde sutil */
-    background-color: #222; /* Fondo oscuro */
-    color: #fff; /* Texto blanco */
-  }
+.modal-content label {
+  text-align: left;
+}
 
-  /* Botón de cerrar */
-  .close-btn {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background: none;
-    border: none;
-    font-size: 18px;
-    cursor: pointer;
-    color: white;
-  }
+.modal-content form {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 100%;
+}
 
-  .modal-btn {
-    width: 100%; 
-    padding: 12px;
-    font-size: 16px;
-    font-weight: bold;
-    color: white;
-    margin-bottom: 20px;
-    background-color: #00ff47;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background 0.3s ease, transform 0.1s ease-in-out;
-  }
-  
-  .modal-btn:hover {
-    background: #5dff8b;
-  }
-  
-  .modal-btn:active {
-    transform: scale(0.95);
-  }
-  
-  .modal-text {
-    font-size: 14px;
-    color: #ccc;
-    text-align: center;
-    margin-top: 10px;
-  }
-  
-  .interactive-text {
-    color: #ffffff;
-    cursor: pointer;
-    transition: color 0.3s ease;
-  }
-  
-  .interactive-text:hover {
-    text-decoration: underline;
-  }
-  
-  body.modal-open {
-    overflow: hidden;
-  }
+.modal-content input {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 5px;
+  border: 1px solid #444;
+  background-color: #222;
+  color: #fff;
+}
 
-  .error-message {
-    color: #ff4d4d;
-    background: rgba(255, 77, 77, 0.1);
-    padding: 8px;
-    border-radius: 5px;
-    margin: 10px 0;
-    font-size: 14px;
-  }
+select {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 5px;
+  border: 1px solid #444;
+  background-color: #222;
+  color: #fff;
+}
 
-  button[type="submit"] {
-    background-color: #00ff47;
-    color: white;
-    padding: 10px 16px;
-    border: none;
-    border-radius: 6px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  
-  button[type="submit"]:disabled {
-    background-color: #aaa;
-    cursor: not-allowed;
-  }
+/* Botón de cerrar */
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  color: white;
+}
 
-  input[type="number"]::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  }
+.modal-btn {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  margin-bottom: 20px;
+  background-color: #00ff47;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.1s ease-in-out;
+}
 
-  .modal-message {
-    margin: 10px 0;
-    padding: 10px;
-    border-radius: 6px;
-    font-weight: 500;
-    text-align: center;
-  }
-  
-  .modal-message.success {
-    color: #00ff47;
-    background: #48ff7c4e;
-    padding: 8px;
-    border-radius: 5px;
-    margin: 10px 0;
-    font-size: 14px;
-  }
-  
-  .modal-message.error {
-    color: #ff4d4d;
-    background: rgba(255, 77, 77, 0.1);
-    padding: 8px;
-    border-radius: 5px;
-    margin: 10px 0;
-    font-size: 14px;
-  }
-  
+.modal-btn:hover {
+  background: #5dff8b;
+}
+
+.modal-btn:active {
+  transform: scale(0.95);
+}
+
+.modal-text {
+  font-size: 14px;
+  color: #ccc;
+  text-align: center;
+  margin-top: 10px;
+}
+
+.interactive-text {
+  color: #ffffff;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.interactive-text:hover {
+  text-decoration: underline;
+}
+
+body.modal-open {
+  overflow: hidden;
+}
+
+.error-message {
+  color: #ff4d4d;
+  background: rgba(255, 77, 77, 0.1);
+  padding: 8px;
+  border-radius: 5px;
+  margin: 10px 0;
+  font-size: 14px;
+}
+
+button[type="submit"] {
+  background-color: #00ff47;
+  color: white;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button[type="submit"]:disabled {
+  background-color: #aaa;
+  cursor: not-allowed;
+}
+
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.modal-message {
+  margin: 10px 0;
+  padding: 10px;
+  border-radius: 6px;
+  font-weight: 500;
+  text-align: center;
+}
+
+.modal-message.success {
+  color: #00ff47;
+  background: #48ff7c4e;
+  padding: 8px;
+  border-radius: 5px;
+  margin: 10px 0;
+  font-size: 14px;
+}
+
+.modal-message.error {
+  color: #ff4d4d;
+  background: rgba(255, 77, 77, 0.1);
+  padding: 8px;
+  border-radius: 5px;
+  margin: 10px 0;
+  font-size: 14px;
+}
+
+/* ========================== */
+/* ESPECÍFICO PARA DEPOSITMODAL */
+/* ========================== */
+
+.deposit-modal-content {
+  background-color: #111;
+  border-radius: 12px;
+  padding: 30px 25px;
+  width: 700px;
+  position: relative;
+  text-align: center;
+  color: #fff;
+}
+
+.deposit-modal-title {
+  font-size: 22px;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.divider {
+  width: 100%;
+  height: 1px;
+  background: #333;
+}
+
+.subtitle {
+  text-align: left;
+  margin-left: 5px;
+  font-size: 15px;
+  color: #ccc;
+}
+
+.payment-options {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 25px;
+  margin-bottom: 25px;
+}
+
+.payment-option {
+  background-color: #222;
+  border-radius: 10px;
+  padding: 12px 15px;
+  cursor: pointer;
+  flex: 1;
+  margin: 0 5px;
+  transition: background-color 0.5s ease, transform 0.5s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.payment-option img.payment-logo {
+  height: 50px;
+  object-fit: contain;
+}
+
+.payment-option:hover {
+  background-color: #3a3a3a;
+}
+
+.payment-option.active {
+  background-color: #333;
+  transform: scale(1.05);
+}
+
+.continue-btn {
+  background-color: #00ff47;
+  color: #ffffff;
+  font-weight: bold;
+  padding: 12px;
+  width: 100%;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.continue-btn:hover {
+  background-color: #4dff7f;
+}
+
+/* NUEVO - Inputs dinámicos para método seleccionado */
+
+.method-fields {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.method-fields label {
+  text-align: left;
+  color: #ccc;
+  font-size: 14px;
+}
+
+.method-fields input {
+  background-color: #222;
+  border: 1px solid #444;
+  border-radius: 6px;
+  padding: 10px;
+  color: white;
+  font-size: 15px;
+}
+.nequi-form-horizontal {
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch; /* hace que ambos hijos tengan la misma altura */
+  gap: 30px;
+  margin-top: 20px;
+  min-height: 270px; /* puedes ajustar esto si tu QR cambia de tamaño */
+}
+
+.qr-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #111; /* opcional para visual */
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.qr-image {
+  width: 180px;
+  height: auto;
+  border-radius: 15px;
+}
+
+.qr-instruction {
+  text-align: center;
+  font-size: 14px;
+  margin-top: 10px;
+}
+
+.form-section {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* reparte los elementos dentro del formulario verticalmente */
+  background-color: #111; /* opcional para que se vea más pro */
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.nequi-form-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  height: 100%;
+}
+
+.nequi-form-fields input[type="text"],
+.nequi-form-fields input[type="number"] {
+  padding: 10px;
+  border-radius: 6px;
+  border: none;
+  background-color: #1c1c1c;
+  color: white;
+  font-size: 14px;
+}
+
+.checkbox-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+}
+
+.modal-btn {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 6px;
+  background-color: limegreen;
+  color: black;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.modal-btn:disabled {
+  background-color: gray;
+  cursor: not-allowed;
+}
+
+.deposit-modal-content {
+  transition: height 0.3s ease;
+  /* el height se adapta automáticamente según el contenido */
+}
+
+.deposit-modal-content.method-view {
+  min-height: 300px; /* más alto para los métodos de pago */
+}
+
+.deposit-modal-content.form-view {
+  padding-bottom: 0px;
+  min-height: 400px; /* más bajo para el formulario */
+}

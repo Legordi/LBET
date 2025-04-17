@@ -112,6 +112,7 @@
 }
 
 .menu-item {
+  color: white !important;
   display: flex;
   align-items: center;
   gap: 10px;
@@ -137,6 +138,7 @@
 
 .menu-icon {
   font-size: 18px;
+  color: white;
 }
 
 .logout-btn {

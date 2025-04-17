@@ -16,7 +16,8 @@ import {
   getDocs,
   query,
   orderBy,
-  limit
+  limit,
+  updateDoc,
 } from "firebase/firestore";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import {
@@ -26,7 +27,7 @@ import {
   FaCoins,
   FaArrowCircleDown,
   FaDollarSign,
-  FaChartBar
+  FaChartBar,
 } from "react-icons/fa";
 
 function AdminPanel() {
@@ -39,6 +40,8 @@ function AdminPanel() {
   const [totalBalances, setTotalBalances] = useState(0);
   const [recentDeposits, setRecentDeposits] = useState([]);
   const [newUsers, setNewUsers] = useState([]);
+  const [depositRequests, setDepositRequests] = useState([]);
+  const [activeSection, setActiveSection] = useState("dashboard");
   const isModalOpen = showLogin || showRegister;
 
   useEffect(() => {
@@ -68,27 +71,30 @@ function AdminPanel() {
 
       setTotalUsers(usersSnapshot.size);
 
-      const balances = usersSnapshot.docs.map(doc => doc.data().balance || 0);
+      const balances = usersSnapshot.docs.map((doc) => doc.data().balance || 0);
       setTotalBalances(balances.reduce((acc, val) => acc + val, 0));
 
-      const deposits = depositSnapshot.docs.map(doc => doc.data().amount || 0);
+      const deposits = depositSnapshot.docs.map((doc) => doc.data().amount || 0);
       setTotalDeposits(deposits.reduce((acc, val) => acc + val, 0));
 
       const recentQuery = query(
-        collection(db, "depositHistory"),
+        collection(db, "solicitudesdeposito"),
         orderBy("timestamp", "desc"),
         limit(5)
       );
       const recentSnapshot = await getDocs(recentQuery);
-      const recent = recentSnapshot.docs.map(doc => ({
+      const recent = recentSnapshot.docs.map((doc) => ({
         ...doc.data(),
         id: doc.id,
       }));
       setRecentDeposits(recent);
 
       const sortedUsers = usersSnapshot.docs
-        .map(doc => ({ username: doc.data().username, createdAt: doc.data().createdAt }))
-        .filter(u => u.username)
+        .map((doc) => ({
+          username: doc.data().username,
+          createdAt: doc.data().createdAt,
+        }))
+        .filter((u) => u.username)
         .slice(-5)
         .reverse();
       setNewUsers(sortedUsers);
@@ -97,9 +103,46 @@ function AdminPanel() {
     fetchAdminData();
   }, []);
 
+  const fetchDepositRequests = async () => {
+    const querySnapshot = await getDocs(collection(db, "depositRequests"));
+    const requests = querySnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+    setDepositRequests(requests);
+  };
+
+  useEffect(() => {
+    if (activeSection === "requests") {
+      fetchDepositRequests();
+    }
+  }, [activeSection]);
+
   const handleLogout = async () => {
     await signOut(auth);
     setUser(null);
+  };
+
+  const handleAccept = async (id, userId, amount) => {
+    const userRef = doc(db, "users", userId);
+    const userSnap = await getDoc(userRef);
+    if (userSnap.exists()) {
+      const currentBalance = userSnap.data().balance || 0;
+      await updateDoc(userRef, {
+        balance: currentBalance + amount,
+      });
+    }
+    await updateDoc(doc(db, "depositRequests", id), {
+      status: "accepted",
+    });
+    fetchDepositRequests();
+  };
+
+  const handleReject = async (id) => {
+    await updateDoc(doc(db, "depositRequests", id), {
+      status: "rejected",
+    });
+    fetchDepositRequests();
   };
 
   useEffect(() => {
@@ -150,8 +193,12 @@ function AdminPanel() {
             </div>
           ) : (
             <div className="buttons">
-              <button className="login-btn" onClick={() => setShowLogin(true)}>Iniciar sesión</button>
-              <button className="register-btn" onClick={() => setShowRegister(true)}>Registrarse</button>
+              <button className="login-btn" onClick={() => setShowLogin(true)}>
+                Iniciar sesión
+              </button>
+              <button className="register-btn" onClick={() => setShowRegister(true)}>
+                Registrarse
+              </button>
             </div>
           )}
         </div>
@@ -162,70 +209,101 @@ function AdminPanel() {
       <main className="admin-panel">
         <aside className="sidebar">
           <h2>ADMIN PANEL</h2>
-          <div className="menu-item active">
+          <div
+            className={`menu-item ${activeSection === "dashboard" ? "active" : ""}`}
+            onClick={() => setActiveSection("dashboard")}
+          >
             <FaChartBar className="icon" />
-            Estadísticas
+            Dashboard
+          </div>
+          <div className="menu-item">
+            <FaUsers className="icon" />
+            Usuarios
+          </div>
+          <div className="menu-item">
+            <FaArrowCircleDown className="icon" />
+            Solicitudes de retiro
           </div>
         </aside>
 
         <section className="dashboard">
-          <div className="cards">
-            <div className="card usuarios"><FaUsers /> <span>{totalUsers}<br />Total Usuarios</span></div>
-            <div className="card depositos"><FaArrowCircleUp /> <span>${totalDeposits.toLocaleString()}<br />Depósitos totales</span></div>
-            <div className="card balances"><FaCoins /> <span>${totalBalances.toLocaleString()}<br />Balance Usuarios</span></div>
-            <div className="card retiros"><FaArrowCircleDown /> <span>$0<br />Retiros totales</span></div>
-            <div className="card ganancias"><FaDollarSign /> <span>${totalDeposits.toLocaleString()}<br />Ganancias totales</span></div>
-          </div>
-
-          <div className="middle-section">
-            <div className="chart-section">
-              <h3>Estadísticas de usuarios</h3>
-              <div className="chart-placeholder">
-                <p className="axis-label y">Cantidad de usuarios nuevos</p>
-                <p className="axis-label x">Fecha x días</p>
+          {activeSection === "dashboard" && (
+            <>
+              {/* Tu sección de estadísticas (sin cambios) */}
+              <div className="cards">
+                <div className="card usuarios">
+                  <FaUsers />
+                  <span>{totalUsers}<br />Total Usuarios</span>
+                </div>
+                <div className="card depositos">
+                  <FaArrowCircleUp />
+                  <span>${totalDeposits.toLocaleString()}<br />Depósitos totales</span>
+                </div>
+                <div className="card balances">
+                  <FaCoins />
+                  <span>${totalBalances.toLocaleString()}<br />Balance Usuarios</span>
+                </div>
+                <div className="card retiros">
+                  <FaArrowCircleDown />
+                  <span style={{ color: "#fe3c55" }}>$0<br />Retiros totales</span>
+                </div>
+                <div className="card ganancias">
+                  <FaDollarSign />
+                  <span>${totalDeposits.toLocaleString()}<br />Ganancias totales</span>
+                </div>
               </div>
-            </div>
 
-            <div className="new-users-section">
-              <h3>Nuevos Usuarios</h3>
-              <ul>
-                {newUsers.map((u, i) => (
-                  <li key={i}>
-                    <span>{u.username}</span>
-                    <span>{u.createdAt ? formatDate(u.createdAt) : "N/A"}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
+              <div className="middle-section">
+                <div className="chart-section">
+                  <h3>Estadísticas de usuarios</h3>
+                  <div className="chart-placeholder">
+                    <p className="axis-label y">Cantidad de usuarios nuevos</p>
+                    <p className="axis-label x">Fecha x días</p>
+                  </div>
+                </div>
 
-          <div className="recent-activity">
-            <h3>Movimientos recientes</h3>
-            <table>
-              <thead>
-                <tr>
-                  <th>Tipo</th>
-                  <th>Usuario</th>
-                  <th>Fecha</th>
-                  <th>Hora</th>
-                  <th>Cantidad</th>
-                </tr>
-              </thead>
-              <tbody>
-                {recentDeposits.map((d) => (
-                  <tr key={d.id}>
-                    <td>Depósito</td>
-                    <td>{d.payerName || d.email}</td>
-                    <td>{formatDate(d.timestamp)}</td>
-                    <td>{formatTime(d.timestamp)}</td>
-                    <td className="amount" style={{ color: "#00ff47" }}>
-                      ${d.amount.toLocaleString()}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                <div className="new-users-section">
+                  <h3>Nuevos Usuarios</h3>
+                  <ul>
+                    {newUsers.map((u, i) => (
+                      <li key={i}>
+                        <span>{u.username}</span>
+                        <span>{u.createdAt ? formatDate(u.createdAt) : "N/A"}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+
+              <div className="recent-activity">
+                <h3>Movimientos recientes</h3>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Tipo</th>
+                      <th>Usuario</th>
+                      <th>Fecha</th>
+                      <th>Hora</th>
+                      <th>Cantidad</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {recentDeposits.map((d) => (
+                      <tr key={d.id}>
+                        <td>Depósito</td>
+                        <td>{d.payerName || d.email}</td>
+                        <td>{formatDate(d.timestamp)}</td>
+                        <td>{formatTime(d.timestamp)}</td>
+                        <td className="amount" style={{ color: "#00ff47" }}>
+                          ${d.amount.toLocaleString()}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </>
+          )}
         </section>
       </main>
 

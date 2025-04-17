@@ -1,131 +1,182 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import "../styles/Modal.css";
+import mercadoPagoLogo from "../assets/images/LogoMercadoPago.png";
+import nequiLogo from "../assets/images/LogoNequi.png";
+import bitcoinLogo from "../assets/images/LogoBitcoin.png";
+import qrImage from "../assets/images/qrNequi.png";
+
 import { db } from "../firebase/firebaseConfig";
 import {
+  doc,
+  getDoc,
   addDoc,
   collection,
   serverTimestamp,
-  doc,
-  getDoc,
-  updateDoc,
 } from "firebase/firestore";
-import { PayPalButtons } from "@paypal/react-paypal-js";
-import { useAuth } from "../context/AuthContext";
-import "../styles/Modal.css";
+import { getAuth } from "firebase/auth";
 
 const DepositModal = ({ onClose }) => {
-  const { currentUser } = useAuth();
-  const [amount, setAmount] = useState("");
-  const [showPayPal, setShowPayPal] = useState(false);
-  const [message, setMessage] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
+  const [selectedMethod, setSelectedMethod] = useState(null);
+  const [showForm, setShowForm] = useState(false);
+  const [nequiConfirmed, setNequiConfirmed] = useState(false);
+  const [userCountry, setUserCountry] = useState("");
 
-  const handleApprove = async (details, paidAmount) => {
-    try {
-      const userRef = doc(db, "users", currentUser.uid);
-      const userSnap = await getDoc(userRef);
+  const paymentMethods = [
+    { name: "Mercado Pago", key: "MercadoPago", logo: mercadoPagoLogo },
+    { name: "Nequi", key: "Nequi", logo: nequiLogo },
+    { name: "Bitcoin", key: "Bitcoin", logo: bitcoinLogo },
+  ];
 
-      if (!userSnap.exists()) {
-        setErrorMessage(" Usuario no encontrado en la base de datos.");
-        return;
-      }
+  const handleSelect = (methodKey) => {
+    setSelectedMethod(methodKey);
+    setShowForm(false);
+    setNequiConfirmed(false);
+  };
 
-      const currentBalance = userSnap.data().balance || 0;
-      const newBalance = currentBalance + Number(paidAmount);
-
-      await updateDoc(userRef, {
-        balance: newBalance,
-      });
-
-      await addDoc(collection(db, "depositHistory"), {
-        userId: currentUser.uid,
-        email: currentUser.email,
-        amount: Number(paidAmount),
-        timestamp: serverTimestamp(),
-        payerName: details.payer.name.given_name,
-        transactionId: details.id,
-        method: "PayPal",
-      });
-
-      setMessage(" Depósito exitoso. Saldo actualizado.");
-      setErrorMessage("");
-      setTimeout(() => onClose(), 2000);
-    } catch (error) {
-      console.error(" Error al procesar depósito:", error);
-      setErrorMessage(" Ocurrió un error al registrar el depósito.");
+  const handleContinue = () => {
+    if (selectedMethod) {
+      setShowForm(true);
     }
   };
 
-  const handleAmountSubmit = (e) => {
+  const getSelectedMethodName = () => {
+    const method = paymentMethods.find((m) => m.key === selectedMethod);
+    return method ? method.name : "";
+  };
+
+  useEffect(() => {
+    const fetchCountry = async () => {
+      try {
+        const auth = getAuth();
+        const user = auth.currentUser;
+
+        if (user) {
+          const userRef = doc(db, "users", user.uid);
+          const userSnap = await getDoc(userRef);
+
+          if (userSnap.exists()) {
+            const userData = userSnap.data();
+            setUserCountry(userData.pais || "");
+          }
+        }
+      } catch (error) {
+        console.error("Error al obtener país del usuario:", error);
+      }
+    };
+
+    fetchCountry();
+  }, []);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!currentUser) {
-      setErrorMessage(" Debes iniciar sesión para hacer un depósito.");
-      return;
+    const auth = getAuth();
+    const user = auth.currentUser;
+
+    const form = e.target;
+    const name = form[0].value;
+    const amount = parseFloat(form[1].value);
+    const transactionRef = form[2].value;
+
+    if (!user) return;
+
+    try {
+      await addDoc(collection(db, "solicitudesdeposito"), {
+        userId: user.uid,
+        usuario: user.email,
+        pais: userCountry,
+        hora: serverTimestamp(),
+        fecha: new Date().toLocaleDateString(),
+        metodo: "Nequi",
+        monto: amount,
+        nombreTitular: name,
+        referencia: transactionRef,
+        estado: "Pendiente",
+        
+      });
+
+      alert("Solicitud enviada correctamente.");
+      onClose();
+    } catch (error) {
+      console.error("Error al enviar solicitud:", error);
+      alert("Hubo un error al enviar la solicitud.");
     }
-
-    const numericAmount = parseFloat(amount);
-    if (!numericAmount || numericAmount < 1) {
-      setErrorMessage(" El monto mínimo es de $1.00 USD.");
-      return;
-    }
-
-    setShowPayPal(true);
-    setMessage("");
-    setErrorMessage("");
-  };
-
-  const handleCancel = () => {
-    setShowPayPal(false);
-    setErrorMessage(" Pago cancelado.");
   };
 
   return (
     <div className="modal-overlay">
-      <div className="modal-content">
+      <div className={`deposit-modal-content ${showForm ? "form-view" : "method-view"}`}>
         <button className="close-btn" onClick={onClose}>✖</button>
-        <h2>Recargar Saldo</h2>
+        <h2 className="modal-title">Depositar saldo</h2>
+        <hr className="divider" />
 
-        {message && <div className="modal-message success">{message}</div>}
-        {errorMessage && <div className="modal-message error">{errorMessage}</div>}
+        {!showForm && (
+          <>
+            <p className="subtitle">Elige un método de pago</p>
+            <div className="payment-options">
+              {paymentMethods.map((method) => (
+                <div
+                  key={method.key}
+                  className={`payment-option ${selectedMethod === method.key ? "active" : ""}`}
+                  onClick={() => handleSelect(method.key)}
+                >
+                  <img src={method.logo} alt={method.name} className="payment-logo" />
+                </div>
+              ))}
+            </div>
 
-        {!showPayPal ? (
-          <form onSubmit={handleAmountSubmit}>
-            <label>Ingresa el monto (USD):</label>
-            <input
-              type="number"
-              min="1"
-              step="0.01"
-              value={amount}
-              onChange={(e) => setAmount(e.target.value)}
-              required
-            />
-            <button type="submit" className="submit-btn">Continuar con PayPal</button>
-          </form>
-        ) : (
-          <PayPalButtons
-            style={{ layout: "vertical" }}
-            createOrder={(data, actions) => {
-              return actions.order.create({
-                purchase_units: [{
-                  amount: {
-                    value: parseFloat(amount).toFixed(2), // Asegura dos decimales
-                  },
-                }],
-              });
-            }}
-            onApprove={(data, actions) => {
-              return actions.order.capture().then((details) => {
-                const paidAmount = details.purchase_units[0].amount.value;
-                handleApprove(details, paidAmount);
-              });
-            }}
-            onCancel={handleCancel}
-            onError={(err) => {
-              console.error("Error de PayPal:", err);
-              setErrorMessage(" Hubo un problema al procesar el pago.");
-              setShowPayPal(false);
-            }}
-          />
+            <button
+              className="continue-btn"
+              onClick={handleContinue}
+              disabled={!selectedMethod}
+            >
+              Continuar con: {getSelectedMethodName()}
+            </button>
+          </>
+        )}
+
+        {showForm && selectedMethod === "Nequi" && (
+          <div className="nequi-form-horizontal">
+            <div className="qr-section">
+              <img src={qrImage} alt="QR Nequi" className="qr-image" />
+              <p className="qr-instruction">
+                Escanea nuestro QR y realiza<br />tu depósito por Nequi
+              </p>
+            </div>
+
+            <div className="form-section">
+              <form className="nequi-form-fields" onSubmit={handleSubmit}>
+                <label>Titular de la cuenta Nequi (Tu nombre)</label>
+                <input type="text" disabled={!nequiConfirmed} required />
+
+                <label>Monto a depositar</label>
+                <input type="number" disabled={!nequiConfirmed} required />
+
+                <label>Referencia de la transacción</label>
+                <input type="text" disabled={!nequiConfirmed} required />
+
+                <div className="checkbox-group">
+                  <input
+                    type="checkbox"
+                    id="nequi-confirm"
+                    checked={nequiConfirmed}
+                    onChange={() => setNequiConfirmed(!nequiConfirmed)}
+                  />
+                  <label htmlFor="nequi-confirm">
+                    Realicé la transacción mediante Nequi
+                  </label>
+                </div>
+
+                <button
+                  type="submit"
+                  className="modal-btn"
+                  disabled={!nequiConfirmed}
+                >
+                  Recargar saldo
+                </button>
+              </form>
+            </div>
+          </div>
         )}
       </div>
     </div>

@@ -37,7 +37,7 @@ header {
   padding: 20px 0px;
   background-color: #111111;
   width: 100%;
-  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.741);
+  box-shadow: 0 2px 15px rgba(9, 9, 9, 0.741);
 }
 
 .logo {
@@ -232,7 +232,7 @@ main {
 .divider {
   border: 1px solid #1e1e1e;
   margin: 20px auto;
-  width: 88%;
+  width: 88% !important;
 }
 
 /* Sección de Juegos */

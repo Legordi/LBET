@@ -1,18 +1,26 @@
-import React, { useState } from "react";
-import { db, registerUser } from "../firebase/auth"; // Importamos la función registerUser
+import React, { useState } from "react"; 
+import { db, registerUser } from "../firebase/auth";
 import { collection, query, where, getDocs, doc, setDoc } from "firebase/firestore";
-import "../styles/Modal.css"; // Asegúrate de tener estilos para el modal
+import "../styles/Modal.css";
 
 function RegisterModal({ onClose, onSwitch }) {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [errorMessage, setErrorMessage] = useState(""); // Estado para mensajes de error
+  const [country, setCountry] = useState(""); // Estado para el país
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const latamCountries = [
+    "Argentina", "Bolivia", "Brasil", "Chile", "Colombia", "Costa Rica", "Cuba",
+    "Ecuador", "El Salvador", "Guatemala", "Honduras", "México", "Nicaragua",
+    "Panamá", "Paraguay", "Perú", "Puerto Rico", "República Dominicana",
+    "Uruguay", "Venezuela"
+  ];
 
   const handleRegister = async (e) => {
     e.preventDefault();
-    setErrorMessage(""); // Limpiar mensaje de error previo
+    setErrorMessage("");
 
     if (password !== confirmPassword) {
       setErrorMessage("Las contraseñas no coinciden.");
@@ -20,10 +28,8 @@ function RegisterModal({ onClose, onSwitch }) {
     }
 
     try {
-      // Verificar si el nombre de usuario o correo ya existen
       const usersRef = collection(db, "users");
 
-      // Consultar por nombre de usuario
       const usernameQuery = query(usersRef, where("username", "==", username));
       const usernameSnapshot = await getDocs(usernameQuery);
       if (!usernameSnapshot.empty) {
@@ -31,7 +37,6 @@ function RegisterModal({ onClose, onSwitch }) {
         return;
       }
 
-      // Consultar por correo electrónico
       const emailQuery = query(usersRef, where("email", "==", email));
       const emailSnapshot = await getDocs(emailQuery);
       if (!emailSnapshot.empty) {
@@ -39,18 +44,17 @@ function RegisterModal({ onClose, onSwitch }) {
         return;
       }
 
-      // Crear usuario con Firebase Auth
       const user = await registerUser(email, password);
 
-      // Guardar en Firestore con campos adicionales
       await setDoc(doc(db, "users", user.uid), {
-        username: username,
-        email: email,
+        username,
+        email,
         balance: 0,
-        rol: "user"
+        rol: "user",
+        pais: country || "No especificado"
       });
 
-      onClose(); // Cerrar modal tras registro exitoso
+      onClose();
     } catch (error) {
       let errorMsg = "Error al registrar.";
       if (error.code === "auth/email-already-in-use") errorMsg = "El correo ya está en uso.";
@@ -96,6 +100,16 @@ function RegisterModal({ onClose, onSwitch }) {
             onChange={(e) => setConfirmPassword(e.target.value)}
             required
           />
+          <select
+            value={country}
+            onChange={(e) => setCountry(e.target.value)}
+            required
+          >
+            <option value="" disabled>Selecciona tu país</option>
+            {latamCountries.map((pais) => (
+              <option key={pais} value={pais}>{pais}</option>
+            ))}
+          </select>
           <button type="submit" className="modal-btn">Registrarse</button>
         </form>
         <p>
