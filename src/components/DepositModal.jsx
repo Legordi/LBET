@@ -1,183 +1,160 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import "../styles/Modal.css";
-import mercadoPagoLogo from "../assets/images/LogoMercadoPago.png";
-import nequiLogo from "../assets/images/LogoNequi.png";
-import bitcoinLogo from "../assets/images/LogoBitcoin.png";
-import qrImage from "../assets/images/qrNequi.png";
+import { db } from '../firebase/firebaseConfig';
+import { doc, updateDoc, getDoc } from 'firebase/firestore';
+import createBTCPayInvoice from '../utils/createBTCPayInvoice';
+import checkBTCPayInvoiceStatus from '../utils/checkBTCPayInvoiceStatus';
 
-import { db } from "../firebase/firebaseConfig";
-import {
-  doc,
-  getDoc,
-  addDoc,
-  collection,
-  serverTimestamp,
-} from "firebase/firestore";
-import { getAuth } from "firebase/auth";
+const DepositModal = ({ user, onClose }) => {
+  const [step, setStep] = useState(1);
+  const [amount, setAmount] = useState('');
+  const [invoiceData, setInvoiceData] = useState(null);
+  const [status, setStatus] = useState('pending');
+  const [isLoadingIframe, setIsLoadingIframe] = useState(true);
 
-const DepositModal = ({ onClose }) => {
-  const [selectedMethod, setSelectedMethod] = useState(null);
-  const [showForm, setShowForm] = useState(false);
-  const [nequiConfirmed, setNequiConfirmed] = useState(false);
-  const [userCountry, setUserCountry] = useState("");
+  useEffect(() => {
+    let interval;
+    if (step === 2 && invoiceData?.invoiceId) {
+      interval = setInterval(async () => {
+        const invoiceStatus = await checkBTCPayInvoiceStatus(invoiceData.invoiceId);
+        if (invoiceStatus === 'Settled' || invoiceStatus === 'Confirmed') {
+          clearInterval(interval);
+          setStatus('success');
+          await handleSuccess();
+        } else if (invoiceStatus === 'Invalid') {
+          clearInterval(interval);
+          setStatus('error');
+        }
+      }, 5000);
+    }
+    return () => clearInterval(interval);
+  }, [step, invoiceData]);
 
-  const paymentMethods = [
-    { name: "Mercado Pago", key: "MercadoPago", logo: mercadoPagoLogo },
-    { name: "Nequi", key: "Nequi", logo: nequiLogo },
-    { name: "Bitcoin", key: "Bitcoin", logo: bitcoinLogo },
-  ];
-
-  const handleSelect = (methodKey) => {
-    setSelectedMethod(methodKey);
-    setShowForm(false);
-    setNequiConfirmed(false);
+  const handleSuccess = async () => {
+    const userRef = doc(db, 'users', user.uid);
+    const userSnap = await getDoc(userRef);
+    const currentBalance = userSnap.data().balance || 0;
+    await updateDoc(userRef, { balance: currentBalance + Number(amount) });
+    setStep(3);
   };
 
-  const handleContinue = () => {
-    if (selectedMethod) {
-      setShowForm(true);
+  const handleNext = async () => {
+    if (!amount || isNaN(amount) || Number(amount) <= 0) return;
+
+    if (!user || !user.email || !user.uid) {
+      console.error('Usuario inválido:', user);
+      setStatus('error');
+      return;
+    }
+
+    try {
+      const { invoiceId, checkoutLink } = await createBTCPayInvoice(amount, user);
+      setInvoiceData({ invoiceId, checkoutLink });
+      setStep(2);
+    } catch (err) {
+      console.error('Error al crear factura:', err);
+      setStatus('error');
     }
   };
 
-  const getSelectedMethodName = () => {
-    const method = paymentMethods.find((m) => m.key === selectedMethod);
-    return method ? method.name : "";
-  };
+  const renderContent = () => {
+    if (step === 1) {
+      return (
+        <>
+          <h2>Depositar saldo</h2>
+          <div className="progress-bar">
+            <div className="circle active" />
+            <div className="circle" />
+            <div className="circle" />
+          </div>
+          <p>Ingrese el monto a depositar</p>
+          <label>Monto en USD</label>
+          <input
+            type="number"
+            value={amount}
+            onChange={(e) => setAmount(e.target.value)}
+            placeholder="0.00"
+          />
+          <button className="green-btn" onClick={handleNext}>Siguiente</button>
+        </>
+      );
+    }
 
-  useEffect(() => {
-    const fetchCountry = async () => {
-      try {
-        const auth = getAuth();
-        const user = auth.currentUser;
+    if (step === 2) {
+      return (
+        <>
+          <h2>Depositar saldo</h2>
+          <div className="progress-bar">
+            <div className="circle active" />
+            <div className="circle active" />
+            <div className="circle" />
+          </div>
+          {status === 'pending' && (
+            <>
+              <p>Escanea el código QR o paga desde tu billetera</p>
+              <div className="qr-section">
+                {isLoadingIframe && (
+                  <div className="spinner-container">
+                    <div className="spinner"></div>
+                  </div>
+                )}
+                {invoiceData?.checkoutLink && (
+                  <iframe
+                    className="btcpay-iframe"
+                    src={invoiceData.checkoutLink}
+                    title="BTCPay Checkout"
+                    frameBorder="0"
+                    width="300"
+                    height="450"
+                    style={{
+                      borderRadius: '12px',
+                      display: isLoadingIframe ? 'none' : 'block'
+                    }}
+                    onLoad={() => setIsLoadingIframe(false)}
+                  ></iframe>
+                )}
+              </div>
+              <ol>
+                <li>Escanea el código QR o realiza el pago directo.</li>
+                <li>Espera la confirmación automática de la red.</li>
+                <li>Tu saldo se actualizará apenas se confirme.</li>
+              </ol>
+            </>
+          )}
+          {status === 'error' && (
+            <div className="error-section">
+              <p style={{ color: 'red' }}>❌ Error en la transacción</p>
+              <button className="green-btn" onClick={() => onClose()}>Cerrar</button>
+            </div>
+          )}
+        </>
+      );
+    }
 
-        if (user) {
-          const userRef = doc(db, "users", user.uid);
-          const userSnap = await getDoc(userRef);
-
-          if (userSnap.exists()) {
-            const userData = userSnap.data();
-            setUserCountry(userData.pais || "");
-          }
-        }
-      } catch (error) {
-        console.error("Error al obtener país del usuario:", error);
-      }
-    };
-
-    fetchCountry();
-  }, []);
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    const auth = getAuth();
-    const user = auth.currentUser;
-
-    const form = e.target;
-    const name = form[0].value;
-    const amount = parseFloat(form[1].value);
-    const transactionRef = form[2].value;
-
-    if (!user) return;
-
-    try {
-      await addDoc(collection(db, "solicitudesdeposito"), {
-        userId: user.uid,
-        usuario: user.email,
-        pais: userCountry,
-        hora: serverTimestamp(),
-        fecha: new Date().toLocaleDateString(),
-        metodo: "Nequi",
-        monto: amount,
-        nombreTitular: name,
-        referencia: transactionRef,
-        estado: "Pendiente",
-        
-      });
-
-      alert("Solicitud enviada correctamente.");
-      onClose();
-    } catch (error) {
-      console.error("Error al enviar solicitud:", error);
-      alert("Hubo un error al enviar la solicitud.");
+    if (step === 3) {
+      return (
+        <>
+          <h2>Depositar saldo</h2>
+          <div className="progress-bar">
+            <div className="circle active" />
+            <div className="circle active" />
+            <div className="circle active" />
+          </div>
+          <div className="success-section">
+            <p className="success-icon">✅</p>
+            <h3>Depósito realizado con éxito</h3>
+            <button className="green-btn" onClick={onClose}>Volver a la página de inicio</button>
+          </div>
+        </>
+      );
     }
   };
 
   return (
     <div className="modal-overlay">
-      <div className={`deposit-modal-content ${showForm ? "form-view" : "method-view"}`}>
-        <button className="close-btn" onClick={onClose}>✖</button>
-        <h2 className="modal-title">Depositar saldo</h2>
-        <hr className="divider" />
-
-        {!showForm && (
-          <>
-            <p className="subtitle">Elige un método de pago</p>
-            <div className="payment-options">
-              {paymentMethods.map((method) => (
-                <div
-                  key={method.key}
-                  className={`payment-option ${selectedMethod === method.key ? "active" : ""}`}
-                  onClick={() => handleSelect(method.key)}
-                >
-                  <img src={method.logo} alt={method.name} className="payment-logo" />
-                </div>
-              ))}
-            </div>
-
-            <button
-              className="continue-btn"
-              onClick={handleContinue}
-              disabled={!selectedMethod}
-            >
-              Continuar con: {getSelectedMethodName()}
-            </button>
-          </>
-        )}
-
-        {showForm && selectedMethod === "Nequi" && (
-          <div className="nequi-form-horizontal">
-            <div className="qr-section">
-              <img src={qrImage} alt="QR Nequi" className="qr-image" />
-              <p className="qr-instruction">
-                Escanea nuestro QR y realiza<br />tu depósito por Nequi
-              </p>
-            </div>
-
-            <div className="form-section">
-              <form className="nequi-form-fields" onSubmit={handleSubmit}>
-                <label>Titular de la cuenta Nequi (Tu nombre)</label>
-                <input type="text" disabled={!nequiConfirmed} required />
-
-                <label>Monto a depositar</label>
-                <input type="number" disabled={!nequiConfirmed} required />
-
-                <label>Referencia de la transacción</label>
-                <input type="text" disabled={!nequiConfirmed} required />
-
-                <div className="checkbox-group">
-                  <input
-                    type="checkbox"
-                    id="nequi-confirm"
-                    checked={nequiConfirmed}
-                    onChange={() => setNequiConfirmed(!nequiConfirmed)}
-                  />
-                  <label htmlFor="nequi-confirm">
-                    Realicé la transacción mediante Nequi
-                  </label>
-                </div>
-
-                <button
-                  type="submit"
-                  className="modal-btn"
-                  disabled={!nequiConfirmed}
-                >
-                  Recargar saldo
-                </button>
-              </form>
-            </div>
-          </div>
-        )}
+      <div className="modal">
+        <button className="close-button" onClick={onClose}>×</button>
+        {renderContent()}
       </div>
     </div>
   );

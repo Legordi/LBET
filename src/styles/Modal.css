@@ -170,206 +170,163 @@ input[type="number"]::-webkit-inner-spin-button {
   font-size: 14px;
 }
 
-/* ========================== */
-/* ESPECÍFICO PARA DEPOSITMODAL */
-/* ========================== */
+/* DepositModal.css */
 
-.deposit-modal-content {
-  background-color: #111;
-  border-radius: 12px;
-  padding: 30px 25px;
-  width: 700px;
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal {
+  background: #1f1f1f;
+  color: #fff;
+  padding: 2rem;
+  border-radius: 16px;
+  max-width: 450px;
+  width: 100%;
   position: relative;
-  text-align: center;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.close-button {
+  position: absolute;
+  top: 16px;
+  right: 20px;
+  background: transparent;
+  border: none;
+  font-size: 24px;
+  color: #999;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+.close-button:hover {
   color: #fff;
 }
 
-.deposit-modal-title {
-  font-size: 22px;
-  margin-bottom: 10px;
+.modal h2 {
+  margin-bottom: 1rem;
+  text-align: center;
+  font-size: 1.5rem;
+}
+
+.modal p {
+  text-align: center;
+}
+
+.modal label {
+  display: block;
+  margin-top: 1rem;
   font-weight: bold;
 }
 
-.divider {
+input[type="number"] {
   width: 100%;
-  height: 1px;
-  background: #333;
-}
-
-.subtitle {
-  text-align: left;
-  margin-left: 5px;
-  font-size: 15px;
-  color: #ccc;
-}
-
-.payment-options {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 25px;
-  margin-bottom: 25px;
-}
-
-.payment-option {
-  background-color: #222;
-  border-radius: 10px;
-  padding: 12px 15px;
-  cursor: pointer;
-  flex: 1;
-  margin: 0 5px;
-  transition: background-color 0.5s ease, transform 0.5s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.payment-option img.payment-logo {
-  height: 50px;
-  object-fit: contain;
-}
-
-.payment-option:hover {
-  background-color: #3a3a3a;
-}
-
-.payment-option.active {
-  background-color: #333;
-  transform: scale(1.05);
-}
-
-.continue-btn {
-  background-color: #00ff47;
-  color: #ffffff;
-  font-weight: bold;
-  padding: 12px;
-  width: 100%;
-  border: none;
+  padding: 0.6rem;
+  margin-top: 0.5rem;
   border-radius: 8px;
-  font-size: 16px;
+  border: none;
+  background: #333;
+  color: #fff;
+  font-size: 1rem;
+}
+
+.green-btn {
+  margin-top: 1.5rem;
+  background: #00c851;
+  color: #fff;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 12px;
+  font-size: 1rem;
+  width: 100%;
   cursor: pointer;
-  transition: background 0.2s ease;
+  transition: background 0.3s ease;
+}
+.green-btn:hover {
+  background: #00b44a;
 }
 
-.continue-btn:hover {
-  background-color: #4dff7f;
-}
-
-/* NUEVO - Inputs dinámicos para método seleccionado */
-
-.method-fields {
-  margin-top: 20px;
+.progress-bar {
   display: flex;
-  flex-direction: column;
-  gap: 15px;
+  justify-content: center;
+  gap: 12px;
+  margin: 1rem 0;
 }
 
-.method-fields label {
-  text-align: left;
-  color: #ccc;
-  font-size: 14px;
+.circle {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #555;
 }
-
-.method-fields input {
-  background-color: #222;
-  border: 1px solid #444;
-  border-radius: 6px;
-  padding: 10px;
-  color: white;
-  font-size: 15px;
-}
-.nequi-form-horizontal {
-  display: flex;
-  justify-content: space-between;
-  align-items: stretch; /* hace que ambos hijos tengan la misma altura */
-  gap: 30px;
-  margin-top: 20px;
-  min-height: 270px; /* puedes ajustar esto si tu QR cambia de tamaño */
+.circle.active {
+  background: #00c851;
 }
 
 .qr-section {
-  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  background-color: #111; /* opcional para visual */
-  border-radius: 10px;
-  padding: 10px;
+  margin-top: 1rem;
 }
-
-.qr-image {
-  width: 180px;
-  height: auto;
-  border-radius: 15px;
+.qr-section img {
+  width: 160px;
+  height: 160px;
+  margin-bottom: 1rem;
+  border: 2px solid #444;
+  border-radius: 8px;
 }
-
-.qr-instruction {
-  text-align: center;
-  font-size: 14px;
-  margin-top: 10px;
-}
-
-.form-section {
-  flex: 2;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between; /* reparte los elementos dentro del formulario verticalmente */
-  background-color: #111; /* opcional para que se vea más pro */
-  border-radius: 10px;
-  padding: 20px;
-}
-
-.nequi-form-fields {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  height: 100%;
-}
-
-.nequi-form-fields input[type="text"],
-.nequi-form-fields input[type="number"] {
-  padding: 10px;
-  border-radius: 6px;
-  border: none;
-  background-color: #1c1c1c;
-  color: white;
-  font-size: 14px;
-}
-
-.checkbox-group {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 14px;
-}
-
-.modal-btn {
-  width: 100%;
-  padding: 12px;
-  border: none;
-  border-radius: 6px;
-  background-color: limegreen;
-  color: black;
+.btc-text {
   font-weight: bold;
-  cursor: pointer;
-  transition: background 0.3s;
+  color: #feca57;
 }
 
-.modal-btn:disabled {
-  background-color: gray;
-  cursor: not-allowed;
+.success-section,
+.error-section {
+  text-align: center;
+  margin-top: 2rem;
 }
 
-.deposit-modal-content {
-  transition: height 0.3s ease;
-  /* el height se adapta automáticamente según el contenido */
+.success-icon {
+  font-size: 48px;
+  margin-bottom: 1rem;
+  color: #00c851;
 }
 
-.deposit-modal-content.method-view {
-  min-height: 300px; /* más alto para los métodos de pago */
+.error-section p {
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
 }
 
-.deposit-modal-content.form-view {
-  padding-bottom: 0px;
-  min-height: 400px; /* más bajo para el formulario */
+ol {
+  margin: 1rem 0;
+  padding-left: 1.2rem;
+  text-align: left;
+}
+ol li {
+  margin-bottom: 0.5rem;
+}
+
+.btcpay-iframe {
+  height: 300px;
 }

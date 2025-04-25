@@ -70,18 +70,18 @@ const Menu = ({ user, onClose, onLogout }) => {
             </li>
           </ul>
           {user?.rol === "admin" && (
-          <>
-            <span className="menu-section-title">Administración</span>
-             <ul className="menu-list">
-              <li className="menu-item">
-              <MdAdminPanelSettings className="menu-icon" />
-              <Link to="/admin" className="menu-link">
-              Admin Panel
-              </Link>
-              </li>
-             </ul>
-          </>
-        )}
+            <>
+              <span className="menu-section-title">Administración</span>
+              <ul className="menu-list">
+                <li className="menu-item">
+                  <MdAdminPanelSettings className="menu-icon" />
+                  <Link to="/admin" className="menu-link">
+                    Admin Panel
+                  </Link>
+                </li>
+              </ul>
+            </>
+          )}
           <button className="logout-btn" onClick={handleLogout}>
             <FiLogOut className="menu-icon" />
             Cerrar sesión
@@ -89,9 +89,10 @@ const Menu = ({ user, onClose, onLogout }) => {
         </div>
       </div>
 
-      {/* MODAL DE DEPÓSITO */}
+      {/* MODAL DE DEPÓSITO - **PASANDO LA PROP `user`** */}
       {showDepositModal && (
         <DepositModal
+          user={user}
           onClose={() => setShowDepositModal(false)}
         />
       )}
