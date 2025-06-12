@@ -1,0 +1,163 @@
+.menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: flex-end;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
+.menu-modal {
+  width: 350px;
+  height: 100%;
+  background: #111;
+  color: white;
+  padding: 40px 20px;
+  display: flex;
+  flex-direction: column;
+  animation: slide-in 0.5s forwards;
+}
+
+.menu-modal.closing {
+  animation: slide-out 0.5s forwards;
+}
+
+@keyframes slide-in {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slide-out {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
+
+.close-btn {
+  align-self: flex-end;
+  margin-top: -10px;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.menu-user-box {
+  background: linear-gradient(90deg, #00ff66, #0a6734);
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.menu-username {
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.menu-balance {
+  display: block;
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.menu-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.menu-action-btn {
+  flex: 1;
+  padding: 10px;
+  background: transparent;
+  border: 1px solid white;
+  border-radius: 6px;
+  color: white;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.menu-action-btn:hover {
+  background: white;
+  color: #181717;
+}
+
+.menu-section-title {
+  font-size: 14px;
+  font-weight: bold;
+  color: #aaa;
+  text-transform: uppercase;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.menu-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 20px 0;
+}
+
+.menu-item {
+  color: white !important;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  padding: 10px;
+  border-radius: 6px;
+  transition: background 0.3s ease;
+}
+
+.menu-item:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+.menu-link {
+  color: white;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: background 0.3s ease;
+}
+
+.menu-icon {
+  font-size: 18px;
+  color: white;
+}
+
+.logout-btn {
+  margin-top: auto;
+  width: 100%;
+  padding: 12px;
+  background: none;
+  border: none;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  gap: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: background 0.3s ease;
+}
+
+.logout-btn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}

@@ -1,0 +1,194 @@
+.admin-panel {
+  margin-top: 0px;
+  display: flex;
+  background-color: #11111100;
+  min-height: 100vh;
+  color: white;
+  padding: 30px 120px 0px 100px;
+}
+
+.sidebar {
+  height: 700px;
+  width: 230px;
+  background-color: #1a1a1a;
+  padding: 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  font-weight: bold;
+  border-radius: 10px;
+}
+
+.sidebar h2 {
+  margin-left: 10px;
+  margin-top: 10px;
+  padding: 0px;
+  font-size: 16px;
+  color: #aaa;
+}
+
+.menu-item {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  cursor: pointer;
+  color: #aaa;
+}
+
+.menu-item.active {
+  color: white;
+}
+
+.dashboard {
+  flex: 1;
+  padding: 0px;
+  padding-left: 20px;
+}
+
+.cards {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.card {
+  flex: 1;
+  min-width: 180px;
+  background-color: #1a1a1a;
+  padding: 1rem;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+.card svg {
+  font-size: 24px;
+}
+
+.card.usuarios { color: #00ffd1; }
+.card.depositos { color: #ffdb4d; }
+.card.balances { color: #4da6ff; }
+.card.retiros { color: #fe3c55; }
+.card.ganancias { color: #00ff47; }
+
+.middle-section {
+  display: flex;
+  margin-top: 2rem;
+  gap: 1rem;
+}
+
+.chart-section, .new-users-section {
+  flex: 1;
+  background-color: #1a1a1a;
+  border-radius: 12px;
+  padding: 1rem;
+}
+
+.chart-placeholder {
+  height: 200px;
+  background-color: #0e0e0e;
+  margin-top: 1rem;
+  position: relative;
+  border-radius: 8px;
+}
+
+.axis-label {
+  position: absolute;
+  font-size: 12px;
+  color: #777;
+}
+
+.axis-label.y {
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%) rotate(-90deg);
+}
+
+.axis-label.x {
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.new-users-section ul {
+  list-style: none;
+  padding: 0;
+  margin-top: 1rem;
+}
+
+.new-users-section li {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #2a2a2a;
+  padding: 0.5rem 0;
+  font-size: 14px;
+}
+
+.recent-activity {
+  margin-top: 2rem;
+  background-color: #1a1a1a;
+  border-radius: 12px;
+  padding: 1rem;
+}
+
+.recent-activity table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  font-size: 14px;
+}
+
+.recent-activity th, .recent-activity td {
+  padding: 0.7rem;
+  text-align: left;
+  border-bottom: 1px solid #2a2a2a;
+}
+
+.amount.in {
+  color: #ff0047;
+}
+
+.amount.out {
+  color: #fe3c55;
+}
+
+.deposit-requests {
+  background-color: #1a1a1a;
+  border-radius: 10px;
+  padding: 2rem;
+  width: 100%;
+  color: white;
+}
+
+.deposit-requests h2 {
+  margin-bottom: 1rem;
+}
+
+.deposit-requests ul {
+  list-style: none;
+  padding: 0;
+}
+
+.deposit-requests li {
+  background-color: #1e1e1e;
+  padding: 1rem;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+  border: 1px solid #333;
+}
+
+.deposit-requests button {
+  padding: 0.5rem 1rem;
+  background-color: #00c853;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.deposit-requests button:last-child {
+  background-color: #d32f2f;
+}
