@@ -1,0 +1,632 @@
+
+@font-face {
+  font-family: 'SF pro';
+  src: url('../assets/fonts/SFPRODISPLAYMEDIUM-DSttQARu.OTF') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'SF pro';
+  src: url('../assets/fonts/SFPRODISPLAYBOLD-CkqE-6tD.OTF') format('opentype');
+  font-weight: bold;
+  font-style: normal;
+}
+* {
+  font-family: 'SF pro', sans-serif;
+}
+body {
+  margin: 0;
+  font-family: 'SF pro', sans-serif;
+  background-color: #000000;
+  color: #fff;
+  padding: 0px 100px;
+}
+
+.content {
+  padding: 20px 0px;
+}
+
+/* Header */
+.header {
+  display: flex;
+  background-color: #000000;
+  height: 60px;
+  padding-top: 20px;
+}
+
+.logo {
+  height: 40px;
+}
+
+.user-info {
+  margin-top: -10px;
+  line-height: 0.5;
+}
+
+/* Menú */
+.menu {
+  display: flex;
+  justify-content: space-between;
+  background-color: #000000;
+}
+
+.menu button {
+  background-color: #000000;
+  color: #fff;
+  border: none;
+  border-top: 2px solid #353535;
+  padding: 10px 20px;
+  flex-grow: calc(100/5);
+  font-size: inherit;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.2s;
+}
+
+.menu button:hover {
+  border-color: #ffffff;
+}
+
+
+/*==============================SECCION INICIO==================================== */
+.inicio-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+}
+
+.games-grid-horizontal {
+  justify-content: space-between;
+  align-items: center;
+  display: flex;
+  gap: 40px;
+  width: 100%;
+  max-width: 100%;
+  margin-top: 40px;
+}
+
+.games-grid-horizontal img {
+  transition: box-shadow 0.15s, border 0.15s;
+  box-shadow: 0 0 0px #00ff7b00;
+  border: 2px solid transparent;
+}
+
+.games-grid-horizontal img:hover {
+  box-shadow: 0 0 24px #00ff7b55;
+  border: 2px solid #00ff7b;
+}
+.game-card {
+  background: #181818;
+  border-radius: 18px;
+  box-shadow: 0 0 12px #0004;
+  padding: 0 0 16px 0;
+  transition: transform 0.15s, box-shadow 0.15s;
+  border: 2px solid #222;
+}
+.game-card:hover {
+  transform: translateY(-8px) scale(1.04);
+  box-shadow: 0 8px 32px #00ff7b33;
+  border-color: #00ff7b;
+}
+
+
+/*===================================SECCION TERMINOS==================================== */
+.seccion-terminos {
+  border-radius: 15px;
+  border: 1px solid #353535;
+  padding: 0px 30px;
+}
+/*=====================================SECCION LOGIN==================================== */
+
+.seccion-login,
+.seccion-register{
+  padding: 30px 0px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #000000;
+}
+
+.formulario {
+  background: #000;
+  border: 1px solid #444;
+  border-radius: 14px;
+  padding: 15px;
+  min-width: 340px;
+  max-width: 350px;
+  box-shadow: 0 2px 16px 0 rgba(0,0,0,0.18);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.formulario h2 {
+  color: #fff;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  text-align: center;
+}
+
+.formulario > p {
+  color: #fff;
+  font-size: 0.9rem;
+  margin: 0 0 18px 0;
+  text-align: center;
+  font-weight: 500;
+}
+
+.formulario form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.formulario form p {
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin: 0 0 6px 2px;
+  text-align: left;
+}
+
+.formulario input[type="text"],
+.formulario input[type="password"],
+.formulario input[type="email"] {
+  width: 100%;
+  padding: 10px 12px;
+  margin-bottom: 18px;
+  border-radius: 8px;
+  border: none;
+  background: #353535;
+  color: #fff;
+  font-size: 1rem;
+  outline: none;
+  box-sizing: border-box;
+  transition: border 0.2s;
+}
+
+.formulario input[type="text"]:focus,
+.formulario input[type="password"]:focus,
+.formulario input[type="email"]:focus {
+  border: 1.5px solid #00ff5a;
+}
+
+.formulario button[type="submit"] {
+  width: 100%;
+  background: #00ff5a;
+  color: #000;
+  font-weight: 600;
+  font-size: 1.1rem;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 0;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.formulario button[type="submit"]:hover {
+  opacity: 0.9;
+}
+
+.formulario .registro-link {
+  color: #fff;
+  font-size: 0.97rem;
+  margin-top: 10px;
+  text-align: center;
+}
+
+.formulario .registro-link a {
+  color: #00ff5a;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.registro-link span {
+  color: #fff;
+}
+.registro-link span:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+/*===============================SECCION MI CUENTA=======================================*/
+/* Panel superior */
+.panel-cuenta {
+  background: #000000;
+  border-radius: 15px;
+  border: 1px solid #353535;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 28px;
+  box-shadow: 0 2px 16px #0002;
+}
+
+.nombre-usuario {
+  font-size: 2em;
+  font-weight: 800;
+  margin: 0 0 6px 0;
+  color: #fff;
+}
+
+.saldo-usuario {
+  color: #00ff5a;
+  font-size: 1.3em;
+  font-weight: 700;
+  margin: 0;
+}
+
+.acciones-cuenta {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.btn-depositar {
+  background: #00ff5a;
+  color: #000000;
+  font-weight: 700;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 28px;
+  font-size: 1em;
+  cursor: pointer;
+  margin-bottom: 4px;
+  transition: background 0.2s;
+}
+.btn-depositar:hover {
+  background: #00e04e;
+}
+
+.btn-retirar {
+  background: transparent;
+  color: #fff;
+  border: 2px solid #fff;
+  border-radius: 8px;
+  padding: 10px 28px;
+  font-size: 1em;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.btn-retirar:hover {
+  background: #fff;
+  color: #111;
+}
+
+/* Panel transacciones */
+.panel-transacciones {
+  background: #000000;
+  border-radius: 15px;
+  border: 1px solid #353535;
+  padding: 20px;
+  margin-top: 0;
+  box-shadow: 0 2px 16px #0002;
+}
+
+.titulo-transacciones {
+  font-size: 1.4em;
+  font-weight: 700;
+  margin-bottom: 16px;
+  color: #fff;
+}
+
+.tabla-transacciones {
+  width: 100%;
+  border-collapse: collapse;
+  background: transparent;
+}
+
+.tabla-transacciones th, .tabla-transacciones td {
+  padding: 10px 8px;
+  text-align: left;
+  font-size: 16px;
+  border-bottom: 1px solid #222;
+}
+
+.tabla-transacciones th {
+  color: #bdbdbd;
+  font-size: 16px;
+  font-weight: 600;
+  background: transparent;
+}
+
+.tabla-transacciones td {
+  color: #fff;
+  font-weight: 400;
+}
+
+.tabla-transacciones tr:last-child td {
+  border-bottom: none;
+}
+
+/* Estado de transacción */
+.estado-aprobada {
+  color: #00ff5a;
+  font-weight: 600;
+}
+.estado-rechazada {
+  color: #ff3c3c;
+  font-weight: 600;
+}
+.estado-pendiente {
+  color: #bdbdbd;
+  font-weight: 600;
+}
+
+.icono-accion {
+  font-size: 1.2em;
+  margin-left: 8px;
+  vertical-align: middle;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.icono-accion.aceptar {
+  color: #00ff5a;
+}
+.icono-accion.aceptar:hover {
+  color: #00c944;
+}
+.icono-accion.rechazar {
+  color: #ff3c3c;
+}
+.icono-accion.rechazar:hover {
+  color: #c90000;
+}
+.estado-aprobada {
+  color: #00ff5a;
+  font-weight: 600;
+}
+.estado-rechazada {
+  color: #ff3c3c;
+  font-weight: 600;
+}
+.estado-pendiente {
+  color: #bdbdbd;
+  font-weight: 600;
+}
+/* Modal de depósito */
+.modal-deposito-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.7);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-deposito {
+  background: #000000;
+  border-radius: 15px;
+  border: 1px solid #353535;
+  padding: 20px;
+  min-width: 400px;
+  max-width: 90vw;
+  box-shadow: 0 4px 32px #000a;
+  position: relative;
+  text-align: center;
+}
+
+.cerrar-modal {
+  position: absolute;
+  top: 18px;
+  right: 22px;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 2em;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.modal-deposito h2 {
+  color: #fff;
+  font-size: 2em;
+  font-weight: 800;
+  margin-bottom: 18px;
+}
+
+.modal-deposito p {
+  color: #fff;
+  text-align: left;
+  font-size: 1.1em;
+  margin-bottom: 18px;
+}
+
+.input-monto {
+  max-width: 100%;
+  width: 100%;
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  background: #222;
+  color: #fff;
+  font-size: 1.1em;
+  margin-bottom: 22px;
+  box-sizing: border-box;
+  outline: none;
+}
+
+.btn-depositar-modal {
+  width: 100%;
+  background: #00ff5a;
+  color: #111;
+  font-weight: 700;
+  border: none;
+  border-radius: 12px;
+  padding: 10px 0;
+  font-size: 1.1em;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.btn-depositar-modal:hover {
+  background: #00e04e;
+}
+
+/* =======================================Wheel======================================== */
+.wheel-game-container {
+  background: #000000;
+  border-radius: 20px;
+  border: 1px solid #353535;
+  padding: 32px 24px;
+  max-width: 900px;
+  margin: 40px auto;
+  position: relative;
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.wheel-game-content {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 40px;
+  justify-content: center;
+  width: 100%;
+}
+.wheel-single-visual {
+  position: relative;
+  width: 220px;
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.wheel-single-arrow {
+  position: absolute;
+  left: -38px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 38px;
+  color: #fff;
+  z-index: 2;
+  filter: drop-shadow(0 0 2px #000);
+}
+.wheel-single-window {
+  width: 180px;
+  height: 90px;
+  overflow: hidden;
+  border-radius: 16px;
+  background: #181818;
+  border: 2px solid #333;
+  box-shadow: 0 0 12px #000a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.wheel-single-mult {
+  width: 100%;
+  height: 100%;
+  font-size: 3.2em;
+  color: #fff;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  letter-spacing: 2px;
+  background: #181818;
+  border-radius: 16px;
+  transition: color 0.2s, font-size 0.2s;
+}
+/* =========================================MINES=======================================*/
+/* Panel izquierdo de Mines */
+.mines-panel {
+  background: #000000 !important;
+  border-radius: 18px;
+  border: 2px solid #444;
+  padding: 36px 40px 36px 40px;
+  min-width: 420px;
+  margin-right: 90px;
+  color: #fff;
+  box-shadow: 0 0 16px #0004;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  font-family: inherit;
+}
+
+.mines-panel h2 {
+  text-align: center;
+  margin-bottom: 32px;
+  font-size: 2rem;
+  font-weight: 800;
+}
+
+.mines-panel label {
+  margin-bottom: 10px;
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.mines-panel input[type="number"] {
+  margin-bottom: 24px;
+  background: #222;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 16px 18px;
+  font-size: 1.25rem;
+  font-weight: 600;
+  outline: none;
+  transition: background 0.2s;
+}
+
+.mines-panel input[type="number"]:focus {
+  background: #292929;
+}
+
+.mines-panel button {
+  margin-top: 18px;
+  width: 100%;
+  background: #00ff7b;
+  color: #111;
+  border: none;
+  border-radius: 16px;
+  font-weight: 700;
+  font-size: 1.5rem;
+  padding: 18px 0;
+  transition: background 0.2s;
+  box-shadow: 0 2px 12px #00ff7b33;
+}
+
+.mines-panel button:hover {
+  background: #00e06b;
+}
+
+/* Grid de Mines */
+.mines-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 72px);
+  grid-template-rows: repeat(5, 72px);
+  gap: 22px;
+  margin-top: 10px;
+  margin-left: 60px;
+}
+
+.mines-cell {
+  width: 72px;
+  height: 72px;
+  border: 2px solid #444;
+  border-radius: 14px;
+  background: #181818;
+  box-sizing: border-box;
+  transition: border 0.2s, background 0.2s;
+}
+
+/* Botón home */
+.btn-home {
+  position: relative;
+  font-size: 38px;
+  background: none;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+}
